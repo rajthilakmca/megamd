@@ -47,8 +47,9 @@ func NewNegHandler() *negroni.Negroni {
 	m.Add("Get", "/logs/", server)
 	//m.Add("Get", "/logs", Handler(logs))
 	m.Add("Get", "/ping", Handler(ping))
-	//m.Add("Get", "/vnc/", server)
-	m.Add("Get", "/vnc/", Handler(vnc))
+	m.Add("Get", "/vnc/", server)
+	m.Add("Post", "/vnc/", server)
+	//m.Add("Get", "/vnc/", Handler(vnc))
 
   socketHandler(server)
 	//socketProcess(server)

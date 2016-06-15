@@ -2,22 +2,42 @@ package api
 
 import (
 	//"encoding/json"
-	"net/http"
-  "fmt"
-  log "github.com/Sirupsen/logrus"
-	"github.com/gorilla/websocket"
-	//"github.com/megamsys/libgo/cmd"
-	//"github.com/googollee/go-socket.io"
-	//"github.com/megamsys/vertice/govnc"
+	"fmt"
+	log "github.com/Sirupsen/logrus"
+	//"net/http"
+	//"errors"
+	"github.com/googollee/go-socket.io"
+	"github.com/megamsys/libgo/cmd"
+	"github.com/megamsys/vertice/govnc"
+
 )
 
-/*func vnc(w http.ResponseWriter, r *http.Request) error {
+const (
+	HOST     = "host"
+	PORT     = "port"
+	PASSWORD = "password"
+)
 
-	return nil
+func vncHandler(so socketio.Socket) {
 
-}*/
+	so.On("vncInit", func(config map[string]interface{}) {
+		vnc := &govnc.Vnc{}
+		err := vnc.FillStruct(config)
+		if err != nil {
+			so.Emit("error", fmt.Sprintf("%v", err))
+			return
+		}
+		fmt.Println("0000000000000000000000000000")
+		vnc.Connect(so)
+	})
 
-var upgrader = websocket.Upgrader{
+	so.On("disconnection", func() {
+		log.Debugf(cmd.Colorfy("  > [socket] ", "blue", "", "bold") + fmt.Sprintf("Disconneted client : %s", so.Id()))
+	})
+}
+
+
+/*var upgrader = websocket.Upgrader{
 	ReadBufferSize:  4096,
 	WriteBufferSize: 4096,
 	CheckOrigin:     func(r *http.Request) bool { return true },
@@ -32,7 +52,7 @@ func vnc(w http.ResponseWriter, r *http.Request) error {
   }
   s := conn.Subprotocol()
 	fmt.Println(s)
-/*  messageType, p, err := conn.ReadMessage()
+  messageType, p, err := conn.ReadMessage()
 
   if err != nil {
     return err
@@ -56,6 +76,6 @@ func vnc(w http.ResponseWriter, r *http.Request) error {
     logData, _ := json.Marshal(logbox)
     conn.WriteMessage(messageType, logData)
   }
-conn.WriteMessage(messageType, []byte("hai"))*/
+conn.WriteMessage(messageType, []byte("hai"))
   return nil
-}
+}*/
